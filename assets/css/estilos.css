@@ -32,18 +32,32 @@ body {
     letter-spacing: -.02em;
 }
 
-.card-stock-bajo {
-    background-color: #f5c2c7;
-    border: 1px solid #ea868f;
+.card-stock-normal {
+    background-color: var(--bs-success-bg-subtle);
+    border: 1px solid var(--bs-success-border-subtle);
 }
 
-.card-stock-bajo p,
-.card-stock-bajo h2 {
-    color: #842029;
+.card-stock-normal .card-body {
+    color: var(--bs-success-text-emphasis);
+}
+
+.card-stock-normal a {
+    color: var(--bs-success-text-emphasis);
+    font-weight: 500;
+}
+
+/* Tarjeta cuando existen productos con stock bajo */
+.card-stock-bajo {
+    background-color: var(--bs-danger-bg-subtle);
+    border: 1px solid var(--bs-danger-border-subtle);
+}
+
+.card-stock-bajo .card-body {
+    color: var(--bs-danger-text-emphasis);
 }
 
 .card-stock-bajo a {
-    color: #842029;
+    color: var(--bs-danger-text-emphasis);
     font-weight: 500;
 }
 .tema-oscuro {

@@ -66,7 +66,7 @@ require __DIR__ . '/includes/navbar.php';
         </div>
 
         <div class="col-12 col-sm-6 col-xl-3">
-    <div class="card stat-card h-100 card-stock-bajo">
+    <div class="card stat-card h-100 <?= $stockBajo > 0 ? 'card-stock-bajo' : 'card-stock-normal' ?>">
         <div class="card-body">
             <p class="text-secondary mb-1">Productos con stock bajo</p>
             <p class="display-6 fw-semibold mb-2"><?= $stockBajo ?></p>
@@ -100,7 +100,7 @@ require __DIR__ . '/includes/navbar.php';
     <div class="row g-4 mt-1">
         <div class="col-12 col-lg-6">
             <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white border-0 pt-4 px-4">
+                <div class="card-header bg-body border-0 pt-4 px-4">
                     <h2 class="h5 mb-0">Alertas de stock bajo</h2>
                 </div>
                 <div class="card-body p-4">
@@ -134,7 +134,7 @@ require __DIR__ . '/includes/navbar.php';
 
         <div class="col-12 col-lg-6">
             <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white border-0 pt-4 px-4 d-flex justify-content-between align-items-center gap-3">
+                <div class="card-header bg-body border-0 pt-4 px-4 d-flex justify-content-between align-items-center gap-3">
                     <h2 class="h5 mb-0">Movimientos recientes</h2>
                     <a href="/TecnoStock/movimientos/index.php" class="small">Ver todos</a>
                 </div>
