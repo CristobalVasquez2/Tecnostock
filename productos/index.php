@@ -43,7 +43,16 @@ if ($idCategoria > 0) {
 $sql .= ' ORDER BY p.estado DESC, p.nombre ASC';
 
 $stmt = $pdo->prepare($sql);
-$stmt->execute($params);
+
+foreach ($params as $parametro => $valor) {
+    $tipo = $parametro === ':categoria'
+        ? PDO::PARAM_INT
+        : PDO::PARAM_STR;
+
+    $stmt->bindValue($parametro, $valor, $tipo);
+}
+
+$stmt->execute();
 $productos = $stmt->fetchAll();
 $flash = obtenerFlash();
 
