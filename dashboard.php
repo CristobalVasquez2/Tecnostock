@@ -70,6 +70,16 @@ require __DIR__ . '/includes/navbar.php';
         <div class="card-body">
             <p class="text-secondary mb-1">Productos con stock bajo</p>
             <p class="display-6 fw-semibold mb-2"><?= $stockBajo ?></p>
+            <?php if ($stockBajo > 0): ?>
+    <p class="small text-danger mb-2">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        Hay productos que requieren reposición.
+    </p>
+<?php else: ?>
+    <p class="small text-success mb-2">
+        Todos los productos activos cumplen su stock mínimo.
+    </p>
+<?php endif; ?>
             <a href="/TecnoStock/productos/index.php" class="small">Revisar stock</a>
         </div>
     </div>
@@ -104,7 +114,16 @@ require __DIR__ . '/includes/navbar.php';
                                         <div class="fw-semibold"><?= e($producto['codigo']) ?> · <?= e($producto['nombre']) ?></div>
                                         <small class="text-secondary"><?= e($producto['categoria']) ?></small>
                                     </div>
-                                    <span class="badge text-bg-warning">Stock <?= (int) $producto['stock_actual'] ?> / mín. <?= (int) $producto['stock_minimo'] ?></span>
+                                    <?php if ((int) $producto['stock_actual'] === 0): ?>
+    <span class="badge text-bg-danger">
+        Sin stock
+    </span>
+<?php else: ?>
+    <span class="badge text-bg-warning">
+        Stock <?= (int) $producto['stock_actual'] ?>
+        / mín. <?= (int) $producto['stock_minimo'] ?>
+    </span>
+<?php endif; ?>
                                 </a>
                             <?php endforeach; ?>
                         </div>
