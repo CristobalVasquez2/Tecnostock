@@ -50,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = trim($_POST['nombre'] ?? '');
     $descripcion = trim($_POST['descripcion'] ?? '');
     $precio = trim($_POST['precio'] ?? '');
-    $stockActual = trim($_POST['stock_actual'] ?? '');
     $stockMinimo = trim($_POST['stock_minimo'] ?? '');
     $idCategoria = trim($_POST['id_categoria'] ?? '');
 
@@ -69,11 +68,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $precioValidado = decimalNoNegativo($precio);
     if ($precioValidado === null) {
         $errores[] = 'El precio debe ser un número igual o mayor que cero.';
-    }
-
-    $stockActualValidado = enteroNoNegativo($stockActual);
-    if ($stockActualValidado === null) {
-        $errores[] = 'El stock actual debe ser un número entero igual o mayor que cero.';
     }
 
     $stockMinimoValidado = enteroNoNegativo($stockMinimo);
@@ -102,22 +96,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$errores) {
         try {
             $stmt = $pdo->prepare(
-                'UPDATE productos
-                 SET codigo = :codigo,
-                     nombre = :nombre,
-                     descripcion = :descripcion,
-                     precio = :precio,
-                     stock_actual = :stock_actual,
-                     stock_minimo = :stock_minimo,
-                     id_categoria = :id_categoria
-                 WHERE id_producto = :id'
-            );
+    'UPDATE productos
+     SET codigo = :codigo,
+         nombre = :nombre,
+         descripcion = :descripcion,
+         precio = :precio,
+         stock_minimo = :stock_minimo,
+         id_categoria = :id_categoria
+     WHERE id_producto = :id'
+);
             $stmt->execute([
                 ':codigo' => $codigo,
                 ':nombre' => $nombre,
                 ':descripcion' => $descripcion !== '' ? $descripcion : null,
                 ':precio' => number_format($precioValidado, 2, '.', ''),
-                ':stock_actual' => $stockActualValidado,
                 ':stock_minimo' => $stockMinimoValidado,
                 ':id_categoria' => $categoriaValidada,
                 ':id' => $id,
@@ -146,7 +138,7 @@ require __DIR__ . '/../includes/navbar.php';
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
                 <div>
                     <h1 class="h3 page-title mb-1">Editar producto</h1>
-                    <p class="text-secondary mb-0">Modifica la información, precio y cantidades del producto.</p>
+                    <p class="text-secondary mb-0">Modifica la información, precio y stock mínimo del producto.</p>
                 </div>
                 <a href="/TecnoStock/productos/index.php?estado=todos" class="btn btn-outline-secondary align-self-start">Volver</a>
             </div>
@@ -205,11 +197,29 @@ require __DIR__ . '/../includes/navbar.php';
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-6">
-                                <label for="stock_actual" class="form-label">Stock actual <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" id="stock_actual" name="stock_actual" required min="0" step="1" value="<?= e($stockActual) ?>">
-                                <div class="invalid-feedback">Ingresa un stock entero no negativo.</div>
-                            </div>
+                            
+<div class="col-12 col-md-6">
+    <label for="stock_actual" class="form-label">
+        Stock actual
+    </label>
+
+    <input
+        type="number"
+        class="form-control"
+        id="stock_actual"
+        value="<?= e($stockActual) ?>"
+        disabled
+    >
+
+    <div class="form-text">
+        El stock solo puede modificarse mediante entradas y salidas
+        de inventario.
+        <a href="/TecnoStock/movimientos/registrar.php">
+            Registrar movimiento
+        </a>
+    </div>
+</div>
+
 
                             <div class="col-12 col-md-6">
                                 <label for="stock_minimo" class="form-label">Stock mínimo <span class="text-danger">*</span></label>
