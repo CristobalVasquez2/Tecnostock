@@ -45,22 +45,45 @@ function obtenerFlash(): ?array
     return $flash;
 }
 
+
 function enteroNoNegativo(mixed $valor): ?int
 {
-    if ($valor === '' || $valor === null || filter_var($valor, FILTER_VALIDATE_INT) === false) {
+    if (
+        $valor === '' ||
+        $valor === null ||
+        filter_var($valor, FILTER_VALIDATE_INT) === false
+    ) {
         return null;
     }
 
     $numero = (int) $valor;
-    return $numero >= 0 ? $numero : null;
+
+    if ($numero < 0 || $numero > 4294967295) {
+        return null;
+    }
+
+    return $numero;
 }
 
 function decimalNoNegativo(mixed $valor): ?float
 {
-    if ($valor === '' || $valor === null || !is_numeric($valor)) {
+    if (!is_string($valor) && !is_int($valor) && !is_float($valor)) {
         return null;
     }
 
-    $numero = (float) $valor;
-    return $numero >= 0 ? $numero : null;
+    $texto = trim((string) $valor);
+
+    // Aceptar hasta 8 dígitos enteros y 2 decimales.
+    if (!preg_match('/^\d{1,8}(?:\.\d{1,2})?$/D', $texto)) {
+        return null;
+    }
+
+    $numero = (float) $texto;
+
+    if (!is_finite($numero) || $numero < 0 || $numero > 99999999.99) {
+        return null;
+    }
+
+    return $numero;
 }
+
