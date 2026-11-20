@@ -25,20 +25,28 @@
         });
     });
 
-    // Cambio de tema claro y oscuro
+    // Tema claro y oscuro
+    const html = document.documentElement;
     const botonTema = document.getElementById('cambiarTema');
     const iconoTema = document.getElementById('iconoTema');
     const textoTema = document.getElementById('textoTema');
 
     function actualizarBotonTema() {
-        const temaActual = document.documentElement.getAttribute('data-bs-theme');
+        const oscuro = html.getAttribute('data-bs-theme') === 'dark';
 
-        if (iconoTema && textoTema) {
-            iconoTema.textContent = temaActual === 'dark' ? '☀️' : '🌙';
+        if (iconoTema) {
+            iconoTema.textContent = oscuro ? '☀️' : '🌙';
+        }
 
-            textoTema.textContent = temaActual === 'dark'
-                ? 'Modo claro'
-                : 'Modo oscuro';
+        if (textoTema) {
+            textoTema.textContent = oscuro ? 'Modo claro' : 'Modo oscuro';
+        }
+
+        if (botonTema) {
+            botonTema.setAttribute(
+                'aria-label',
+                oscuro ? 'Activar modo claro' : 'Activar modo oscuro'
+            );
         }
     }
 
@@ -46,13 +54,16 @@
         actualizarBotonTema();
 
         botonTema.addEventListener('click', () => {
-            const temaActual = document.documentElement.getAttribute('data-bs-theme');
-
+            const temaActual = html.getAttribute('data-bs-theme');
             const nuevoTema = temaActual === 'dark' ? 'light' : 'dark';
 
-            document.documentElement.setAttribute('data-bs-theme', nuevoTema);
+            html.setAttribute('data-bs-theme', nuevoTema);
 
-            localStorage.setItem('tecnostock-tema', nuevoTema);
+            try {
+                localStorage.setItem('tecnostock-tema', nuevoTema);
+            } catch (error) {
+                console.warn('No se pudo guardar la preferencia del tema.', error);
+            }
 
             actualizarBotonTema();
         });
