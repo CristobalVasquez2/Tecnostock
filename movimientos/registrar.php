@@ -84,8 +84,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $nuevoStock = $stockAnterior;
 
             if ($tipo === 'ENTRADA') {
-                $nuevoStock = $stockAnterior + (int) $cantidadValidada;
-            } else {
+    $nuevoStock = $stockAnterior + (int) $cantidadValidada;
+
+    if ($nuevoStock > 4294967295) {
+        throw new DomainException(
+            'La entrada supera el stock máximo permitido.'
+        );
+    }
+} else {
                 if ((int) $cantidadValidada > $stockAnterior) {
                     throw new DomainException(
                         'La salida no puede superar el stock disponible (' . $stockAnterior . ' unidades).'
